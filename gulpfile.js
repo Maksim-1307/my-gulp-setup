@@ -5,59 +5,93 @@ const autoprefixer = require('gulp-autoprefixer');
 const pug = require('gulp-pug');
 const browsersync = require('browser-sync').create();
 var concat = require('gulp-concat');
-
-var currentPugFile = "roads";
+const tap = require('gulp-tap');
+const { fstat } = require('fs');
+const fs = require('fs');
 
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 })
 
-// paths
+//SETTINGS
+
+let currentPage = 'index.pug';
+let toCompress = false;
+
+
+//PROJECT STRUCTURE
 
 //folders
-let build_folder = "#dist";
-let source_folder = "#src";
+let folders = [];
+folders.build = "#dist/";
+folders.source = "#src/";
+folders.pug = folders.source + 'pug/';
+folders.pages = folders.pug + 'pages/';
+folders.pug_blocks = folders.pug + 'blocks/';
+folders.scss = folders.source + 'scss/';
+folders.scss_blocks = folders.scss + 'blocks/';
+folders.js = folders.source + 'js/';
+folders.img = folders.source + 'img/';
+folders.icons = folders.img + 'icons/';
 
 //files
-let pug_file = source_folder + "/" + currentPugFile + ".pug";
-let style_file = source_folder + "/style.scss";
+let files = [];
+files.main_page = folders.pages + 'index.pug';
+files.sytle = folders.scss + 'style.scss';
 
+
+
+function build_structure(done) {
+    for (var obj in folders) {
+        fs.mkdirSync(folders[obj], { recursive: true }, (err) => {
+            if (err) console.error(err);
+        });
+    }
+    for (var obj in files) {
+        fs.writeFile(files[obj], '', (err) => {
+            if (err) console.error(error);
+        });
+    }
+    done();
+}
 
 function compile_scss(done) {
-    console.log("starting processing scss")
-    gulp.src(style_file)
+    gulp.src(files.sytle)
         .on('error', console.error.bind(console))
         .pipe(sass({
-            errorLogToConsole: true
-            //outputStyle: 'compressed'
+            errorLogToConsole: true,
+            outputStyle: 'compressed'
         }))
         .on('error', console.error.bind(console))
         .pipe(autoprefixer({
             cascade: false
         }))
         .pipe(rename("style.css"))
-        .pipe(gulp.dest(build_folder));
-    console.log("finish processign scss");
+        .pipe(gulp.dest(folders.build))
+        .pipe(browsersync.stream());
     done();
 }
 
 function compile_pug(done) {
-    gulp.src(pug_file)
+    gulp.src(folders.pages + "*.pug")
         .on('error', console.error.bind(console))
         .pipe(pug({
             pretty: true
         }))
         .on('error', console.error.bind(console))
-        .pipe(rename(currentPugFile + ".html"))
-        .pipe(gulp.dest(build_folder));
+        .pipe(rename(tap(function (file) {
+            return (file.basename);
+        })))
+        .pipe(gulp.dest(folders.build))
+        .pipe(browsersync.stream());
     done();
 }
 
 function process_js(done) {
-    gulp.src(source_folder + "/js/*.js")
+    gulp.src(folders.js + "*.js")
         .pipe(concat('script.js'))
-        .pipe(gulp.dest(build_folder))
+        .pipe(gulp.dest(folders.build))
         .pipe(browsersync.stream());
     done();
 }
@@ -75,8 +109,8 @@ function process_fonts(done) {
 function browser_init(done) {
     browsersync.init({
         server: {
-            baseDir: build_folder,
-            index: currentPugFile + ".html"
+            baseDir: folders.build,
+            index: currentPage.replace('.pug', '.html')
         },
         files: "#dist/*",
         port: 3000
@@ -85,14 +119,12 @@ function browser_init(done) {
 }
 
 function watcher() {
-    gulp.watch(source_folder + "/**/*.scss", compile_scss);
-    gulp.watch(source_folder + "/**/*.pug", compile_pug);
-    gulp.watch(source_folder + "/**/*.{jpg,png,jpeg,webp,svg,gif}", process_img);
-    gulp.watch(source_folder + "/**/*.js", process_js);
-    gulp.watch(source_folder + "/**/*.{ttf,woff2,woff,otf}", process_fonts);
-    gulp.watch(source_folder + "/scss/*.scss"); 
-    gulp.watch(source_folder + "/pug/*.pug");
-    gulp.watch(source_folder + "/texts/*.txt");
+    gulp.watch(folders.source + "**/*.scss", compile_scss);
+    gulp.watch(folders.source + "**/*.pug", compile_pug);
+    gulp.watch(folders.source + "**/*.{jpg,png,jpeg,webp,svg,gif}", process_img);
+    gulp.watch(folders.source + "**/*.js", process_js);
+    gulp.watch(folders.source + "**/*.{ttf,woff2,woff,otf}", process_fonts);
+    gulp.watch(folders.source + "texts/*.txt");
     browsersync.stream();
 }
 
@@ -107,12 +139,14 @@ function block(done) {
     }
 }
 
+
 gulp.task('scss', compile_scss);
 gulp.task('pug', compile_pug);
 gulp.task('js', process_js);
 gulp.task('img', process_img);
 gulp.task('fonts', process_fonts);
 gulp.task(block);
+gulp.task('init', build_structure);
 
 gulp.task('default', gulp.series(compile_pug, compile_scss, process_js, browser_init, watcher));
 
@@ -128,7 +162,5 @@ console input name of block
 add multiply pug pages
 
 при изменениях должны перекомпилироваться все файлы, а не только выбранный
-
-невозможно использовать один js файл на всех страницах. Выдает ошибки, есои нет нужных элементов
 
 */
