@@ -1,8 +1,5 @@
 node_modules
 .DS_Store
 #src
-./#src
 #src/**
-#src/pug/pages/index.pug
-#dist
-#dist/
+#src/scss/style.scss
