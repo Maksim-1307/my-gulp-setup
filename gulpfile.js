@@ -24,8 +24,8 @@ let toCompress = false;
 
 //folders
 let folders = [];
-folders.build = "#dist/";
-folders.source = "#src/";
+folders.build = "$dist/";
+folders.source = "$src/";
 folders.pug = folders.source + 'pug/';
 folders.pages = folders.pug + 'pages/';
 folders.pug_blocks = folders.pug + 'blocks/';
