@@ -17,7 +17,7 @@ const readline = require('readline').createInterface({
 //SETTINGS
 
 let currentPage = 'index.pug';
-let toCompress = false;
+let toCompress = true;
 
 
 //PROJECT STRUCTURE
@@ -61,7 +61,7 @@ function compile_scss(done) {
         .on('error', console.error.bind(console))
         .pipe(sass({
             errorLogToConsole: true,
-            outputStyle: 'compressed'
+            outputStyle: (toCompress) ? 'compressed' : 'expanded'
         }))
         .on('error', console.error.bind(console))
         .pipe(autoprefixer({
@@ -77,7 +77,7 @@ function compile_pug(done) {
     gulp.src(folders.pages + "*.pug")
         .on('error', console.error.bind(console))
         .pipe(pug({
-            pretty: true
+            pretty: (toCompress) ? false : true
         }))
         .on('error', console.error.bind(console))
         .pipe(rename(tap(function (file) {

@@ -5,7 +5,7 @@ author Maksim1307
 
 функционал:
 
-1) вводится комаеда: node block [name]
+1) вводится команда: node block [name]
 если имя не введено, выдасть ошибку
 
 2) создать файл #src/scss/[name].scss
@@ -22,10 +22,10 @@ const fs = require('fs');
 
 let name = process.argv[2];
 
-const sourceFolder = "#src/";
-const mainFile = sourceFolder + "style.scss";
-const blocksFolder = sourceFolder + "scss/";
-const fileImport = "@import \"scss/" + name + '.scss\";';
+const sourceFolder = "$src/";
+const mainFile = sourceFolder + "scss/style.scss";
+const blocksFolder = sourceFolder + "scss/blocks";
+const fileImport = "@import \"blocks/" + name + '.scss\";';
 
 if (name) {
     let filePath = blocksFolder + name + ".scss";
