@@ -24,25 +24,25 @@ let name = process.argv[2];
 
 const sourceFolder = "$src/";
 const mainFile = sourceFolder + "scss/style.scss";
-const blocksFolder = sourceFolder + "scss/blocks";
+const blocksFolder = sourceFolder + "scss/blocks/";
 const fileImport = "@import \"blocks/" + name + '.scss\";';
 
 if (name) {
     let filePath = blocksFolder + name + ".scss";
     let fileContent = "." + name + "{\n\n}";
 
-    if (!fs.existsSync(filePath)){
+    if (!fs.existsSync(filePath)) {
         //write block file
         fs.writeFile(filePath, fileContent, (err) => {
-            if (err){
+            if (err) {
                 console.log(err);
             } else {
                 //include in style.scss
                 fs.readFile(mainFile, (err, data) => {
                     let newData = data + '\n' + fileImport;
                     console.log(fileImport);
-                    fs.writeFile(mainFile, newData, 'utf-8', function (err){
-                        if (err){
+                    fs.writeFile(mainFile, newData, 'utf-8', function (err) {
+                        if (err) {
                             console.log(err);
                         } else {
                             console.log('block was successfully created');
