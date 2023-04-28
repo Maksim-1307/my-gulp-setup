@@ -97,8 +97,11 @@ function process_js(done) {
 }
 
 function process_img(done) {
-    console.log('WARNING! IMG PROCESSING NOT REALIZED!');
+    gulp.src(folders.img + "/**/*")
+        .pipe(gulp.dest(folders.build + "img"))
+        .pipe(browsersync.stream());
     done();
+    console.log('img processing');
 }
 
 function process_fonts(done) {
@@ -148,7 +151,7 @@ gulp.task('fonts', process_fonts);
 gulp.task(block);
 gulp.task('init', build_structure);
 
-gulp.task('default', gulp.series(compile_pug, compile_scss, process_js, browser_init, watcher));
+gulp.task('default', gulp.series(compile_pug, compile_scss, process_js, process_img, browser_init, watcher));
 
 
 /*
