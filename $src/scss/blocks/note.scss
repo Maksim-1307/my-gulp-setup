@@ -1,0 +1,15 @@
+.note{
+    background-color: $second-color-light;
+    padding: 15px;
+    gap: 10px;
+    border-radius: 16px;
+    color: $second-color;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    max-width: 670px;
+    &__icon{
+        max-width: 30px;
+        max-height: 30px;
+    }
+}

@@ -1,0 +1,33 @@
+.logo {
+    background-image: url("img/logo_black_default.svg");
+    display: inline-block;
+    width: 319px;
+    min-width: 319px;
+    height: 75px;
+    min-height: 75px;
+    background-repeat: no-repeat;
+    &--white{
+        width: 231px;
+        min-width: 231px;
+        height: 40px;
+        min-height: 40px;
+        background-image: url("img/logo_white_default.svg") !important;
+        @media screen and (max-width: 600px) {
+            background-image: url("img/logo_white_small.svg") !important;
+        }
+    }
+    @media screen and (max-width: 700px) {
+        width: 231px;
+        min-width: 231px;
+        height: 44px;
+        min-height: 44px;
+        background-image: url("img/logo_black_small.svg");
+    }
+    @media screen and (max-width: 350px) {
+        width: 195px;
+        min-width: 195px;
+        height: 33px;
+        min-height: 33px;
+        background-image: url("img/logo_black_verysmall.svg");
+    }
+}
