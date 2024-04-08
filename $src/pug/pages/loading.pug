@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title InfoMarker
+        link(rel="stylesheet" href="style.css")
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    body 
+        .wrapper
+            include ../blocks/header.pug
+            section.upload-section
+                .container
+                    .upload-field
+                        img.upload-field__icon(src="img/icons/preloader.svg")
+                        p.upload-field__text Документ обрабатывается. Это может занять некоторое время, не закрывайте вкладку браузера
+            section.note-section
+                .container
+                    .note
+                        img(src="img/icons/info-icon.svg").note__icon
+                        .note-text Результаты проверки <b>[InfoMarker]*</b> носят строго рекомендательный характер и не могут использоваться в качестве юридического документа
+        include ../blocks/footer.pug
