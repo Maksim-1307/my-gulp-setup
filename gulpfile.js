@@ -16,7 +16,7 @@ const readline = require('readline').createInterface({
 
 //SETTINGS
 
-let currentPage = 'index.pug';
+let currentPage = 'main.pug';
 let toCompress = true;
 
 
@@ -98,7 +98,7 @@ function process_js(done) {
 
 function process_img(done) {
     gulp.src(folders.img + "/**/*")
-        .pipe(gulp.dest(folders.build + "img"))
+        .pipe(gulp.dest(folders.build + "assets"))
         .pipe(browsersync.stream());
     done();
     console.log('img processing');
